@@ -12,3 +12,15 @@ export enum WHATSAPP_EVENT {
     CLIENT_READY = "EVT_client-ready",
     DISCONNECT = "EVT_disconnected"
 }
+
+export enum STATUS { IDLE, LOADING, QR_READY, CLIENT_READY }
+
+export interface IState {
+    status: STATUS
+    qr: string
+}
+
+export interface IEvent {
+    type: WHATSAPP_EVENT
+    payload: any
+}
