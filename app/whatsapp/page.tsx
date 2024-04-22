@@ -10,7 +10,7 @@ import socket from "@/app/sockets/socket"
 export default function WhatsappPage() {
     const { Canvas } = useQRCode()
     const [state, setState] = useState<IState>({
-        status: STATUS.IDLE,
+        status: STATUS.LOADING,
         qr: ""
     })
 
@@ -36,7 +36,7 @@ export default function WhatsappPage() {
             case STATUS.IDLE:
                 return <button onClick={handleInitClient}>Generar QR</button>
             case STATUS.LOADING:
-                return <p>Cargando...</p>
+                return <p>Cargando QR...</p>
             case STATUS.CLIENT_READY:
                 return <button onClick={handleCloseClient}>Cerrar sesión</button>
             default:
