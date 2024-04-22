@@ -10,25 +10,21 @@ export default function Home() {
     const code = useSearchParams().get("code")
 
     useEffect(() => {
-        if (code !== "")
-            updateMlCode(code)
+        if (code !== "") updateMlCode(code)
     }, [code])
 
     const handleGetTokenML = async () => {
         if (typeof code === "string") {
-
             const { data } = await authMl({ code })
             updateMlTokens({
                 mlAccessToken: data.access_token,
                 mlRefreshToken: data.refresh_token
             })
-            console.log("data: ", data)
         }
     }
     
     const handleChangeRefreshToAccess = async () => {
         if (typeof mlRefreshToken === "string") {
-            
             const { data } = await authMl({ refreshToken: mlRefreshToken })
             updateMlTokens({
                 mlAccessToken: data.access_token,
@@ -41,14 +37,10 @@ export default function Home() {
         <div>
             <Link href="/whatsapp">Ir a WhatsApp</Link>
             <h1>Roger</h1>
-            <button
-                onClick={handleGetTokenML}
-            >
+            <button onClick={handleGetTokenML}>
                 Obtener Token de Mercado Libre
             </button>
-            <button
-                onClick={handleChangeRefreshToAccess}
-            >
+            <button onClick={handleChangeRefreshToAccess}>
                 Actualizar Access Token con Refresh Token
             </button>
             <p>mlAccessToken: {mlAccessToken}</p>
