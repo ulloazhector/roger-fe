@@ -13,6 +13,11 @@ export enum WHATSAPP_EVENT {
     DISCONNECT = "EVT_disconnected"
 }
 
+export enum ML_TOKEN_STATUS {
+    IDLE, 
+    TOKEN_AUTHORIZED
+}
+
 export enum STATUS { IDLE, LOADING, QR_READY, CLIENT_READY }
 
 export interface IState {
