@@ -1,6 +1,11 @@
 import { IState, IEvent, STATUS, WHATSAPP_EVENT } from "@/app/types/types"
 
 export const machine = (currentStatus: IState, event: IEvent): IState => {
+    if (event.type === WHATSAPP_EVENT.MESSAGE) return {
+        ...currentStatus,
+        message: [...currentStatus.message, event.payload.message.body]
+    }
+
     switch (currentStatus.status) {
         case STATUS.IDLE:
             if (event.type === WHATSAPP_EVENT.LOADING) return {
