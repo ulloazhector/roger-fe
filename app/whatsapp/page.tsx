@@ -7,6 +7,7 @@ import { EVENT_TYPE, IState, STATUS } from "@/app/types/types"
 import { machine } from "@/app/whatsapp/state/machine"
 import socket from "@/app/sockets/socket"
 import { useApp } from "../contexts/AppContext"
+import { asyncHandler } from "../utils/asyncHandler"
 
 export default function WhatsappPage() {
     const { Canvas } = useQRCode()
@@ -22,24 +23,18 @@ export default function WhatsappPage() {
     socket.on(EVENT_TYPE.BOT, (event) => setState(machine(state, event)))
 
     const handleInitClient = async () => {
-        try {
-            await initClient()
-        } catch (error) {
-            console.log(error)
-        }
+        await asyncHandler(initClient)
     }
 
     const handleCloseClient = async () => {
-        try {
+        await asyncHandler(async () => {
             await closeClient()
             updateWaClient(null)
-        } catch (error) {
-            console.log(error)
-        }
+        })
     }
-
+    
     const handleGetClientStatus = async () => {
-        try {
+        await asyncHandler(async () => {
             const resp = await getClientStatus()
             if (resp.status === 200) {
                 updateWaClient(resp.data.data)
@@ -48,9 +43,7 @@ export default function WhatsappPage() {
                     status: STATUS.CLIENT_READY
                 })
             }
-        } catch (error) {
-            console.log(error)
-        }
+        })
     }
 
     useEffect(() => {
