@@ -31,3 +31,19 @@ export interface IEvent {
     type: WHATSAPP_EVENT
     payload: any
 }
+
+export interface IWaClient {
+    pushname: string
+    wid: {
+        server: string
+        user: string
+        _serialized: string
+    }
+    me: {
+        server: string
+        user: string
+        _serialized: string
+    }
+    phone: any
+    platform: string
+}

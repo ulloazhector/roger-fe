@@ -1,6 +1,6 @@
 'use client'
-import { ReactNode, createContext, useContext, useReducer } from "react"
-import { ML_TOKEN_STATUS } from "../types/types"
+import { ReactNode, createContext, useContext, useEffect, useReducer } from "react"
+import { IWaClient, ML_TOKEN_STATUS } from "../types/types"
 import axios from "axios"
 
 // State
@@ -9,13 +9,15 @@ interface AppState {
     mlAccessToken: string | null
     mlRefreshToken: string | null
     mlTokenStatus: ML_TOKEN_STATUS
+    waClient: IWaClient | null
 }
 
 const initialAppState: AppState = {
     mlCode: null,
     mlAccessToken: null,
     mlRefreshToken: null,
-    mlTokenStatus: ML_TOKEN_STATUS.IDLE
+    mlTokenStatus: ML_TOKEN_STATUS.IDLE,
+    waClient: null
 }
 
 // Action
@@ -31,6 +33,9 @@ type AppAction = {
 } | {
     type: 'updateMlTokenStatus',
     payload: { mlTokenStatus: AppState['mlTokenStatus'] }
+} | {
+    type: 'updateWaClient',
+    payload: { waClient: AppState['waClient'] }
 }
 
 const AppReducer = (state: AppState, action: AppAction): AppState => {
@@ -53,6 +58,11 @@ const AppReducer = (state: AppState, action: AppAction): AppState => {
                 ...state,
                 mlTokenStatus: payload.mlTokenStatus
             }
+        case "updateWaClient":
+            return {
+                ...state,
+                waClient: payload.waClient
+            }
 
         default:
             return state
@@ -66,6 +76,7 @@ interface AppContextProps extends AppState {
         mlAccessToken: AppState['mlAccessToken'],
         mlRefreshToken: AppState['mlRefreshToken']
     }) => void
+    updateWaClient: (waClient: AppState['waClient']) => void
 }
 
 interface AppProviderProps {
@@ -118,7 +129,16 @@ export const AppProvider = ({ children }: AppProviderProps) => {
         }
     }
 
-    const value = { ...state, updateMlCode, updateMlTokens }
+    const updateWaClient: AppContextProps['updateWaClient'] = (waClient) => {
+        dispatch({
+            type: 'updateWaClient',
+            payload: { waClient }
+        })
+    }
+
+    useEffect(() => { console.log("state.waClient: ", state.waClient)}, [state.waClient])
+
+    const value = { ...state, updateMlCode, updateMlTokens, updateWaClient }
 
     return (
         <AppContext.Provider value={value}>
